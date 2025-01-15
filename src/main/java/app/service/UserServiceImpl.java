@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepo userRepo;
@@ -30,17 +29,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
         userRepo.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void editUser(User user) {
         if (user != null && !user.getId().equals(userRepo.findById(user.getId()).orElse(null).getId())) {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -50,18 +52,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getUserById(Long id) {
         return userRepo.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.getUserByUsername(username);
     }
 }
-

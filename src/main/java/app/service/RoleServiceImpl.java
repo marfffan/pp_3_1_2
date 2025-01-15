@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
 
 @Service
-@Transactional
 public class RoleServiceImpl implements RoleService {
 
     private RoleRepo roleRepo;
@@ -21,16 +19,19 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Role getRoleByName(String name) {
         return roleRepo.getRoleByName(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Role getRoleById(Long id) {
         return roleRepo.findById(id).get();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Role> allRoles() {
         return roleRepo.findAll();
     }

@@ -10,12 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -27,25 +26,25 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping(value = "/admin")
+    @GetMapping
     public String welcome() {
         return "redirect:/admin/all";
     }
 
-    @GetMapping(value = "admin/all")
+    @GetMapping("/all")
     public String allUsers(ModelMap model) {
         model.addAttribute("users", userService.getAllUsers());
         return "allUsersPage";
     }
 
-    @GetMapping(value = "admin/add")
+    @GetMapping("/add")
     public String addUser(Model model) {
         User user = new User();
         model.addAttribute("user", user);
         return "addUser";
     }
 
-    @PostMapping(value = "admin/add")
+    @PostMapping("/add")
     public String postAddUser(@ModelAttribute("user") User user,
                               @RequestParam(required=false) String roleAdmin,
                               @RequestParam(required=false) String roleVIP) {
@@ -63,8 +62,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
-    @GetMapping(value = "admin/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String editUser(ModelMap model, @PathVariable("id") Long id) {
         User user = userService.getUserById(id);
         Set<Role> roles = user.getRoles();
@@ -79,7 +77,8 @@ public class AdminController {
         model.addAttribute("user", user);
         return "editUser";
     }
-    @PostMapping(value = "admin/edit")
+
+    @PostMapping("/edit")
     public String postEditUser(@ModelAttribute("user") User user,
                                @RequestParam(required=false) String roleAdmin,
                                @RequestParam(required=false) String roleVIP) {
@@ -97,10 +96,9 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("admin/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteUserById(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
-
 }
