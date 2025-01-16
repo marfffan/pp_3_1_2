@@ -2,6 +2,7 @@ package app.service;
 
 import app.model.User;
 import app.repository.UserRepo;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,6 +67,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //Ленивая загрузка
+        User user = userRepo.getUserByUsername(username);
+        Hibernate.initialize(user.getRoles());
         return userRepo.getUserByUsername(username);
     }
 }
